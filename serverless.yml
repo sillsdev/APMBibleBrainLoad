@@ -1,0 +1,31 @@
+service: biblebrainimport
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: us-east-1
+  stage: dev #cli build params will override this!!
+  stackName: biblebrainimport${self:custom.myStage}
+
+custom:
+  myStage: ${opt:stage, self:provider.stage} #use the --stage CLI option if it exists, or use provider.stage
+plugins:
+  -serverless-plugin-typescript
+package:
+  patterns:
+    - 'node_modules/**/*'
+   
+functions:
+  biblebrainimport:
+    handler: src/index.handler # required, handler set in AWS Lambda
+    name: biblebrainimport-${self:custom.myStage} # optional, Deployed Lambda name
+    description: Import Bible brain info # Description to publish to AWS
+    runtime: nodejs16.x # optional overwrite, default is provider runtime
+    memorySize: ${file(./serverless.env.yml):${self:custom.myStage}.MEMORY} # optional, in MB, default is 1024
+    timeout:  ${file(./serverless.env.yml):${self:custom.myStage}.TIMEOUT} # optional, in seconds, default is 6
+    environment:
+      SIL_TR_HOST: ${file(./serverless.env.yml):${self:custom.myStage}.SIL_TR_HOST}
+      SIL_TR_URLPATH: ${file(./serverless.env.yml):${self:custom.myStage}.SIL_TR_URLPATH}
+      TIMEOUT: ${file(./serverless.env.yml):${self:custom.myStage}.TIMEOUT}
+    role: ${file(./serverless.env.yml):${self:custom.myStage}.SIL_TR_LAMBDA_ROLE}
+    

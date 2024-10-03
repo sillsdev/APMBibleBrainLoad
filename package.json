@@ -1,0 +1,23 @@
+{
+  "name": "biblebrainimport",
+  "version": "1.0.0",
+  "description": "deploy:\r  npm run build \r  serverless deploy --verbose -s qa",
+  "main": "index.js",
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "build": "tsc",
+    "deploy": "serverless deploy --verbose -s qa"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.145",
+    "@types/node": "^22.7.4",
+    "aws-sdk": "^2.1691.0",
+    "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "axios": "^1.7.7"
+  }
+}
